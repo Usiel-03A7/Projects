@@ -4,20 +4,17 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const increment = () => {
-    if (count < 12) {
-      setCount(count + 1);
+  const [todo, setTodo] = useState('')
+  const [newTodo, setNewTodo] = useState([])
+  const handle = (e) => {
+    setTodo(e.target.value)
+  }
+
+  const save = () => {
+    if (todo.trim() !== '') {
+      setNewTodo([...newTodo, todo])
+      setTodo('')
     }
-  }
-  const decrement = () => {
-
-    if (count > 0)
-      setCount(count - 1);
-
-  }
-  const zero = () => {
-    setCount(0)
   }
 
   return (
@@ -32,21 +29,14 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <button onClick={increment} >
-          de count is {count}
-        </button>
-        <button onClick={decrement}>
-          the count is {count}
-        </button>
-
-        Edit <button onClick={zero}>
-          resetcount {count}
-        </button>
-
+        <input type="text" onChange={handle} value={todo} placeholder='ingresa tarea' />
+        <button onClick={save} >save</button>
       </div>
+      <ul>
+        {newTodo.map((item, index) => (
+          <li key={index} > {item}</li>
+        ))}
+      </ul>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>

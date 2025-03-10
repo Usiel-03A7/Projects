@@ -4,7 +4,22 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(1)
+  const increment = () => {
+    if (count <= 11 || count == 0) {
+
+      setCount(count + 1);
+    }
+  }
+  const decrement = () => {
+
+    if (count >= 1)
+      setCount(count - 1);
+
+  }
+  const zero = () => {
+    setCount(0)
+  }
 
   return (
     <>
@@ -21,9 +36,17 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <button onClick={increment} >
+          de count is {count}
+        </button>
+        <button onClick={decrement}>
+          the count is {count}
+        </button>
+
+        Edit <button onClick={zero}>
+          resetcount {count}
+        </button>
+
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more

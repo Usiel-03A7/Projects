@@ -1,47 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState } from "react";
 import './App.css'
-
-function App() {
+const App = () => {
   const [todo, setTodo] = useState('')
-  const [newTodo, setNewTodo] = useState([])
+  const [list, setList] = useState([])
+
   const handle = (e) => {
     setTodo(e.target.value)
   }
+  const save = (e) => {
+    console.log('save');
+    e.preventDefault()
+    if (todo.trim() == '') return
+    setList([...list, todo])
+    setTodo('')
+  }
+  const Edit = (i) => {
+    const newText = prompt('add new text', list[i])
+    const newlist = list.map((item, index) => {
+      if (i == index) return i
+      return newText
+    })
+    setList(newlist);
+  }
 
-  const save = () => {
-    if (todo.trim() !== '') {
-      setNewTodo([...newTodo, todo])
-      setTodo('')
-    }
+  const Delete = (i) => {
+    const newList = list.filter((item, index) => index !== i)
+    setList(newList)
   }
 
   return (
-    <>
+    <div>
+      <form onSubmit={save}>
+        <h2>To Do list Add</h2>
+        <input
+          type="text"
+          onChange={handle}
+          value={todo}
+          placeholder="add text" />
+        <button>save</button>
+      </form>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <input type="text" onChange={handle} value={todo} placeholder='ingresa tarea' />
-        <button onClick={save} >save</button>
-      </div>
-      <ul>
-        {newTodo.map((item, index) => (
-          <li key={index} > {item}</li>
+        <h2>To do list items</h2>
+        {list.map((value, index) => (
+          <div key={index}>
+            <input type="text" value={value} readOnly />
+            <button onClick={() => (Edit(index))} >Edit</button>
+            <button onClick={() => (Delete(index))} >Delete</button>
+
+          </div>
         ))}
-      </ul>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      </div>
+
+    </div>
   )
 }
-
-export default App
+export default App;

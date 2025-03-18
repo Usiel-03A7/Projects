@@ -1,57 +1,59 @@
 import { useState } from "react";
 import './App.css'
+
 const App = () => {
-  const [todo, setTodo] = useState('')
-  const [list, setList] = useState([])
+  const [tarea, setTarea] = useState('');
+  const [lista, setLista] = useState([]);
+  const manejador = (e) => {
+    setTarea(e.target.value)
+  }
+  const guardar = (e) => {
+    e.preventDefault();
+    if (tarea.trim() === '') return
+    const tareaObj = {
+      id: Date.now(),
+      texto: tarea,
+      completada: false
+    }
+    setLista([...lista, tareaObj])
+    setTarea('')
+  }
+  const eliminar = (id) => {
+    const nuenvaLista = lista.filter((tarea) => tarea.id !== id)
+    setLista(nuenvaLista)
+  }
 
-  const handle = (e) => {
-    setTodo(e.target.value)
-  }
-  const save = (e) => {
-    console.log('save');
-    e.preventDefault()
-    if (todo.trim() == '') return
-    setList([...list, todo])
-    setTodo('')
-  }
-  const Edit = (i) => {
-    const newText = prompt('add new text', list[i])
-    const newlist = list.map((item, index) => {
-      if (i == index) return i
-      return newText
+  const editar = (id) => {
+    const nuevoTexto = prompt('Ingresa el nuevo texto')
+    if (nuevoTexto === null || nuevoTexto === '') return
+    const nuevaLista = lista.map((tarea) => {
+      if (tarea.id === id) return { ...tarea, texto: nuevoTexto }
+      return tarea
     })
-    setList(newlist);
+    setLista(nuevaLista)
   }
-
-  const Delete = (i) => {
-    const newList = list.filter((item, index) => index !== i)
-    setList(newList)
-  }
-
   return (
     <div>
-      <form onSubmit={save}>
-        <h2>To Do list Add</h2>
-        <input
-          type="text"
-          onChange={handle}
-          value={todo}
-          placeholder="add text" />
-        <button>save</button>
+
+      <form onSubmit={guardar}>
+        <h2>Ingresa Tareas</h2>
+        <input type="text" value={tarea} onChange={manejador} />
+        <button type="submit" >Guardat</button>
       </form>
       <div>
-        <h2>To do list items</h2>
-        {list.map((value, index) => (
-          <div key={index}>
-            <input type="text" value={value} readOnly />
-            <button onClick={() => (Edit(index))} >Edit</button>
-            <button onClick={() => (Delete(index))} >Delete</button>
-
+        <h2>Lista de pendientes</h2>
+        {lista.map((tarea) => (
+          <div key={tarea.id}>
+            <input type="text" value={tarea.texto} readOnly />
+            <button onClick={() => { editar(tarea.id) }} >Editar</button>
+            <button onClick={() => { eliminar(tarea.id) }} >Eliminar</button>
           </div>
         ))}
       </div>
 
+
     </div>
   )
+
 }
 export default App;

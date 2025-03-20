@@ -1,5 +1,6 @@
 import { useState } from "react";
 import './App.css'
+import Edit from "./components/Edit";
 
 const App = () => {
   const [tarea, setTarea] = useState('');
@@ -37,20 +38,21 @@ const App = () => {
 
       <form onSubmit={guardar}>
         <h2>Ingresa Tareas</h2>
-        <input type="text" value={tarea} onChange={manejador} />
-        <button type="submit" >Guardat</button>
+        <input className="border-2 mr-2 border-black" type="text" value={tarea} onChange={manejador} />
+        <button type="submit" className="hover:bg-sky-700 bg-blue-600 text-orange-200">Guardat</button>
       </form>
       <div>
         <h2>Lista de pendientes</h2>
         {lista.map((tarea) => (
-          <div key={tarea.id}>
-            <input type="text" value={tarea.texto} readOnly />
-            <button onClick={() => { editar(tarea.id) }} >Editar</button>
-            <button onClick={() => { eliminar(tarea.id) }} >Eliminar</button>
+          <div className="mb-2" key={tarea.id}>
+            <input className="border-2 mr-2 border-black" type="text" value={tarea.texto} readOnly />
+            <button className=" mr-2  bg-orange-600 text-orange-200" onClick={() => { editar(tarea.id) }} >Editar</button>
+            <button className="bg-red-700 text-orange-200" onClick={() => { eliminar(tarea.id) }} >Eliminar</button>
           </div>
         ))}
       </div>
 
+      <Edit />
 
     </div>
   )

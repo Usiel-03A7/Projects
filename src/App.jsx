@@ -1,61 +1,64 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import './App.css'
-import Edit from "./components/Edit";
-
-const App = () => {
-  const [tarea, setTarea] = useState('');
-  const [lista, setLista] = useState([]);
-  const manejador = (e) => {
-    setTarea(e.target.value)
+export default function App() {
+  const [todo, setTodo] = useState('')
+  const [list, setList] = useState([])
+  const handle = (e) => {
+    setTodo(e.target.value);
   }
-  const guardar = (e) => {
-    e.preventDefault();
-    if (tarea.trim() === '') return
-    const tareaObj = {
+  const Save = (e) => {
+    e.preventDefault()
+    if (todo === '') return
+    const todoObj = {
       id: Date.now(),
-      texto: tarea,
-      completada: false
+      text: todo,
+      completed: false
     }
-    setLista([...lista, tareaObj])
-    setTarea('')
+    setList([...list, todoObj])
+    setTodo('')
   }
-  const eliminar = (id) => {
-    const nuenvaLista = lista.filter((tarea) => tarea.id !== id)
-    setLista(nuenvaLista)
+  const DeleteTodo = (id) => {
+    const newList = list.filter(() => todo.id !== id)
+    setList(newList);
   }
-
-  const editar = (id) => {
-    const nuevoTexto = prompt('Ingresa el nuevo texto')
-    if (nuevoTexto === null || nuevoTexto === '') return
-    const nuevaLista = lista.map((tarea) => {
-      if (tarea.id === id) return { ...tarea, texto: nuevoTexto }
-      return tarea
+  const edit = (id) => {
+    const newText = prompt('Add edit to do')
+    if (newText === '' || newText === null) return
+    const newlist = list.map((todo) => {
+      if (todo.id === id) return { ...todo, text: newText }
+      return todo
     })
-    setLista(nuevaLista)
+    setList(newlist)
+  }
+  const Todoit = (id) => {
+
+    const newlist = list.map((todo) => {
+      if (todo.id === id) return { ...todo, completed: !todo.completed }
+      return todo
+    })
+    setList(newlist)
   }
   return (
     <div>
-
-      <form onSubmit={guardar}>
-        <h2>Ingresa Tareas</h2>
-        <input className="border-2 mr-2 border-black" type="text" value={tarea} onChange={manejador} />
-        <button type="submit" className="hover:bg-sky-700 bg-blue-600 text-orange-200">Guardat</button>
-      </form>
       <div>
-        <h2>Lista de pendientes</h2>
-        {lista.map((tarea) => (
-          <div className="mb-2" key={tarea.id}>
-            <input className="border-2 mr-2 border-black" type="text" value={tarea.texto} readOnly />
-            <button className=" mr-2  bg-orange-600 text-orange-200" onClick={() => { editar(tarea.id) }} >Editar</button>
-            <button className="bg-red-700 text-orange-200" onClick={() => { eliminar(tarea.id) }} >Eliminar</button>
+        <h2>List to do press</h2>
+        <form onSubmit={Save}>
+          <input type="text" onChange={handle} value={todo} placeholder="Enter a to do " />
+          <button type="submit" >Save</button>
+        </form>
+      </div>
+      <div>
+        <h2>To do adds</h2>
+        {list.map((todo) => (
+          <div key={todo.id}>
+            <input type="text" value={todo.text} readOnly />
+            <button onClick={() => DeleteTodo(todo.id)}>Delete</button>
+            <button onClick={() => edit(todo.id)} >edit</button>
+            <button onClick={() => Todoit(todo.id)} >{todo.completed ? '✅ Completed' : '⏳ Pending'}</button>
           </div>
         ))}
       </div>
-
-      <Edit />
-
     </div>
   )
-
 }
-export default App;
+

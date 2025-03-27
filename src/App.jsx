@@ -18,7 +18,7 @@ export default function App() {
     setTodo('')
   }
   const DeleteTodo = (id) => {
-    const newList = list.filter(() => todo.id !== id)
+    const newList = list.filter((todo) => todo.id !== id)
     setList(newList);
   }
   const edit = (id) => {
